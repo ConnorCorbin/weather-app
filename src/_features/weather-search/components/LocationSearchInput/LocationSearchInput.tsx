@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useDeferredValue, useState } from "react";
 
 import {
   useController,
@@ -39,7 +39,7 @@ export function LocationSearchInput({
 
   const { data: geoLocations } = useGeoLocationSearchQuery({
     filters: {
-      name: debouncedSearchTerm,
+      name: useDeferredValue(debouncedSearchTerm),
     },
   });
 
