@@ -1,15 +1,15 @@
-import { format, isToday } from "date-fns";
+import { format } from "date-fns";
 
 import { Paper } from "../../../../../components/Paper";
 import { Weather } from "../../../../_types/weather";
 
-export function WeatherResultCard({ weather }: WeatherResultCardProps) {
-  const date = new Date(weather.date);
+const DATE_FORMAT = "dd/MM/yyy";
 
+export function WeatherResultCard({ weather }: WeatherResultCardProps) {
   return (
     <Paper className="flex flex-col gap-1 p-2">
       <span className="block font-bold text-center">
-        {isToday(date) ? "Today" : format(weather.date, "iiii")}
+        {format(weather.date, `${DATE_FORMAT} '-' iiii`)}
       </span>
       <span className="block text-center">{weather.description}</span>
       <div className="mt-auto">
