@@ -1,16 +1,19 @@
 import { Suspense } from "react";
 
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { QueryErrorBoundary } from "../../_components/QueryErrorBoundary";
 
-import { locationFormSchema } from "./constants/locationFormSchema";
+import {
+  locationFormSchema,
+  type LocationFormSchema,
+} from "./constants/locationFormSchema";
 import { LocationSearchInput } from "./components/LocationSearchInput";
 import { WeatherResults } from "./components/WeatherResults";
 
 export function WeatherSearch({}) {
-  const { control, setValue, watch } = useForm({
+  const { control, handleSubmit, setValue, watch } = useForm({
     resolver: yupResolver(locationFormSchema),
     defaultValues: {
       id: "",
@@ -19,6 +22,12 @@ export function WeatherSearch({}) {
       timezone: "",
     },
   });
+
+  const onSubmit: SubmitHandler<LocationFormSchema> = (_, e) => {
+    // We do not care about submitting data for this form, so prevent the
+    // default behavior.
+    e?.preventDefault();
+  };
 
   const [latitude, longitude, timezone] = watch([
     "latitude",
@@ -29,7 +38,7 @@ export function WeatherSearch({}) {
   return (
     <>
       <div className="mx-auto mb-10 max-w-3xl ">
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <QueryErrorBoundary>
             <LocationSearchInput control={control} setValue={setValue} />
           </QueryErrorBoundary>

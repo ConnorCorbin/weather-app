@@ -2,7 +2,11 @@ import * as yup from "yup";
 
 export const locationFormSchema = yup
   .object({
-    id: yup.string().trim().default("").required(),
+    id: yup
+      .string()
+      .trim()
+      .default("")
+      .required("Please enter a location, name or postal code"),
     latitude: yup.number().default(0).required(),
     longitude: yup.number().default(0).required(),
     timezone: yup.string().trim().default("").required(),
