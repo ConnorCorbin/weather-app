@@ -6,7 +6,7 @@ export const locationFormSchema = yup
       .string()
       .trim()
       .default("")
-      .required("Please enter a location, name or postal code"),
+      .required("Please enter a town, city or postal code"),
     latitude: yup.number().default(0).required(),
     longitude: yup.number().default(0).required(),
     timezone: yup.string().trim().default("").required(),

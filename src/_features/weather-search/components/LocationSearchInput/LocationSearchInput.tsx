@@ -54,18 +54,21 @@ export function LocationSearchInput({
     value: selectedOption,
     filterOptions: (option) => option,
     inputValue: searchTerm,
+    // If free solo is true, we have to use `as` to narrow down the types
+    // due to https://github.com/mui/material-ui/issues/33093
+    freeSolo: true,
     onInputChange: (_, newValue) => {
       setSearchTerm(newValue);
     },
     onChange: (_, newValue) => {
       if (newValue) {
-        nameField.field.onChange(newValue.id);
+        nameField.field.onChange((newValue as GeoLocation).id);
 
-        setValue("latitude", newValue.latitude);
-        setValue("longitude", newValue.longitude);
-        setValue("timezone", newValue.timezone);
+        setValue("latitude", (newValue as GeoLocation).latitude);
+        setValue("longitude", (newValue as GeoLocation).longitude);
+        setValue("timezone", (newValue as GeoLocation).timezone);
 
-        setSelectedOption(newValue);
+        setSelectedOption(newValue as GeoLocation);
       } else {
         nameField.field.onChange("");
 
@@ -77,10 +80,10 @@ export function LocationSearchInput({
       }
     },
     getOptionLabel: (option) => {
-      return option.name;
+      return (option as GeoLocation).name;
     },
     getOptionKey: (option) => {
-      return option.id;
+      return (option as GeoLocation).id;
     },
   });
 
