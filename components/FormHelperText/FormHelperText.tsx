@@ -11,7 +11,7 @@ export const FormHelperText = forwardRef<
   return (
     <p
       ref={ref}
-      className={cx("text-sm", isError && "text-red-600 ", className)}
+      className={cx("text-sm", isError && "text-red-600", className)}
       {...props}
     >
       {children}

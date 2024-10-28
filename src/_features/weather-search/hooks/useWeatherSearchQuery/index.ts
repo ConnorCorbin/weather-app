@@ -1,0 +1,1 @@
+export { useWeatherSearchQuery } from "./useWeatherSearch";

@@ -8,6 +8,7 @@ import {
 import { useDebounce } from "use-debounce";
 import { useAutocomplete } from "@mui/base";
 
+import { type GeoLocation } from "../../../../_types/geoLocation";
 import { FormField } from "../../../../../components/FormField";
 import { FormLabel } from "../../../../../components/FormLabel";
 import { FormSelect } from "../../../../../components/FormSelect";
@@ -16,13 +17,17 @@ import { FormOptionList } from "../../../../../components/FormOptionList/FormOpt
 import { FormOptionListItem } from "../../../../../components/FormOptionListItem";
 import { FormErrorMessage } from "../../../../_components/FormErrorMessage";
 
-import { useGeoLocationSearchQuery } from "../../hooks/useGeoLocationSearch";
+import { useGeoLocationSearchQuery } from "../../hooks/useGeoLocationSearchQuery";
 import { LocationFormSchema } from "../../constants/locationFormSchema";
 
 export function LocationSearchInput({
   control,
   setValue,
 }: LocationSearchInputProps) {
+  const [selectedOption, setSelectedOption] = useState<GeoLocation | null>(
+    null
+  );
+
   const [searchTerm, setSearchTerm] = useState("");
 
   const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
@@ -38,10 +43,6 @@ export function LocationSearchInput({
     },
   });
 
-  const selectedName = geoLocations.find(
-    (geoLocation) => geoLocation.id === nameField.field.value
-  );
-
   const {
     getRootProps,
     getInputProps,
@@ -50,7 +51,7 @@ export function LocationSearchInput({
     groupedOptions,
   } = useAutocomplete({
     options: geoLocations,
-    value: selectedName ?? null,
+    value: selectedOption,
     filterOptions: (option) => option,
     inputValue: searchTerm,
     onInputChange: (_, newValue) => {
@@ -63,15 +64,17 @@ export function LocationSearchInput({
         setValue("latitude", newValue.latitude);
         setValue("longitude", newValue.longitude);
         setValue("timezone", newValue.timezone);
+
+        setSelectedOption(newValue);
       } else {
         nameField.field.onChange("");
 
         setValue("latitude", 0);
         setValue("longitude", 0);
         setValue("timezone", "");
-      }
 
-      return newValue?.id ?? null;
+        setSelectedOption(null);
+      }
     },
     getOptionLabel: (option) => {
       return option.name;

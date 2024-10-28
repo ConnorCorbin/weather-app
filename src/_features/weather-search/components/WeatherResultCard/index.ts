@@ -1,0 +1,1 @@
+export { WeatherResultCard } from "./WeatherResultCard";
